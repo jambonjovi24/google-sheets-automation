@@ -1,0 +1,120 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1_F8cHphgikxvK9_vuwto6ChDtXIn1ps37vsllqUkQZA/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Project Tasks",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_F8cHphgikxvK9_vuwto6ChDtXIn1ps37vsllqUkQZA/edit#gid=0"
+        },
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "specifyRange"
+            }
+          }
+        }
+      },
+      "id": "b7efaed8-a22f-4eea-9bf4-e8415f5e17e5",
+      "name": "Google Sheets Trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        560,
+        260
+      ],
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "ZO9JduCCeA4Y9dl2",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Create an array to hold formatted task messages\nconst tasks = [];\n\n// Loop over input items\nfor (const item of $input.all()) {\n  // Extract relevant fields from each item\n  const task = item.json.Task;  // Adjust this to match your column name\n  const status = item.json.Status;  // Adjust this to match your column name\n  const deadline = item.json.Deadline;  // Adjust this to match your column name\n  const assignedTo = item.json[\"Assigned To\"];  // Adjust this to match your column name\n\n  // Create a formatted message for each task\n  tasks.push(`Task: ${task}, Status: ${status}, Deadline: ${deadline}, Assigned To: ${assignedTo}`);\n}\n\n// Return the formatted tasks as a single string\nreturn [{ tasks: tasks.join(\"\\n\") }];\n"
+      },
+      "id": "a1ea0125-bcb0-4d19-bf5c-d41068fe25cf",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        780,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "itsdarrenblad@gmail.com",
+        "subject": "test 1",
+        "message": "great success",
+        "options": {}
+      },
+      "id": "1c67b3d0-fdd1-4785-ab71-dfba2ab5d6d4",
+      "name": "Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1000,
+        260
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "eJfh9E9ac5HtZcuq",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a6df0288-8b5d-4155-a6f7-56fc41128521",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7302ee034e12a5178efd4697599d4b2945b84cac438001ff82d17dd80cab1343"
+  },
+  "id": "gC0qW57PXrdGlKKD",
+  "tags": []
+}
